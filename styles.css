@@ -107,6 +107,10 @@ body {
   border-radius: 1rem;
   border: 1px solid #2f2f3a;
   padding: 2rem;
+  overflow-y: auto;       /* Activa la barra vertical */
+  max-height: 85vh;       /* Define la altura máxima visible */
+  scrollbar-width: thin;  /* Scroll más fino (para Firefox) */
+  scrollbar-color: #8a4dff #1a1a22; /* Colores del scroll */
 }
 
 .detail-section {
