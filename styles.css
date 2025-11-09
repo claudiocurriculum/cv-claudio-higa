@@ -1,3 +1,4 @@
+/* ================== BASE ================== */
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #0f0f14;
@@ -22,7 +23,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 1rem .75rem;
-  
+  position: relative; /* necesario para indicadores */
 }
 
 .sidebar-header {
@@ -41,7 +42,13 @@ body {
   font-weight: 600;
 }
 
-/* Menú vertical */
+/* Contenedor que realmente se desliza en móvil */
+.sidebar-scroller {
+  position: relative;
+  width: 100%;
+}
+
+/* Menú vertical (desktop) / horizontal (mobile) */
 .sidebar-menu {
   display: flex;
   flex-direction: column;
@@ -55,7 +62,7 @@ body {
   border: 1px solid #343446;
   border-radius: .6rem;
   color: #c7c8d9;
-  font-size: .7rem; /*.7rem*/
+  font-size: .7rem; /* .7rem */
   width: 100%;
   max-width: 90px;
   min-height: 70px;
@@ -65,6 +72,7 @@ body {
   justify-content: center;
   gap: .4rem;
   transition: 0.2s;
+  text-align: center;
 }
 
 .menu-item i {
@@ -78,10 +86,33 @@ body {
   border-color: #4a4cff;
 }
 
+/* --- Indicadores de scroll (base) --- */
+.scroll-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: .35rem .45rem;
+  border-radius: .6rem;
+  background: rgba(15,15,20,.55);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  opacity: 0;              /* por defecto oculto */
+  pointer-events: none;
+  transition: opacity .2s ease;
+  z-index: 2;
+}
+.scroll-indicator.left  { left: 4px; }
+.scroll-indicator.right { right: 4px; }
+.scroll-indicator i { font-size: .9rem; color: #fff; }
+
+/* Mostrar según clases que setea el JS en móvil */
+.sidebar.show-left  .scroll-indicator.left  { opacity: 1; }
+.sidebar.show-right .scroll-indicator.right { opacity: 1; }
+
 /* --- ÁREA PRINCIPAL --- */
 .main-area {
   display: grid;
-  grid-template-columns: 1fr 3fr; /* cambio clave: la derecha ahora es triple */
+  grid-template-columns: 1fr 3fr; /* derecha triple */
   gap: 2rem;
   padding: 2rem;
 }
@@ -89,15 +120,15 @@ body {
 .photo-panel {
   display: flex;
   justify-content: center;
-  align-items: flex-start; 
+  align-items: flex-start;
   background: #1a1a22;
   border-radius: 1rem;
   border: 1px solid #2f2f3a;
 }
 
 .profile-photo {
-  width: 250px; /* 200px */
-  height: 300px; /* 200 px */
+  width: 250px;
+  height: 300px;
   border-radius: 1rem;
   border: 3px solid #8a4dff;
   object-fit: cover;
@@ -114,34 +145,25 @@ body {
   scrollbar-color: #8a4dff #1a1a22;
 }
 
-.detail-section {
-  display: none;
-}
+/* Secciones de detalle */
+.detail-section { display: none; }
+.detail-section.visible { display: block; }
 
-.detail-section.visible {
-  display: block;
-}
+h2 { color: #8a4dff; }
 
-h2 {
-  color: #8a4dff;
-}
 .mini-img {
   display: block;
-  margin: 25px auto 45px auto;  /* centrada con espacio arriba y abajo */
-  width: 100%;                   /* ocupa el 95% del ancho de la columna */
-  max-width: 600px;             /* límite para pantallas grandes */
-  height: auto;                 /* mantiene proporciones originales */
+  margin: 25px auto 45px auto; /* centrada con espacio */
+  width: 100%;
+  max-width: 600px;
+  height: auto;
   border-radius: 12px;
   box-shadow: 0 0 18px rgba(0, 0, 0, 0.4);
   transition: transform 0.25s ease;
 }
+.mini-img:hover { transform: scale(1.10); }
 
-.mini-img:hover {
-  transform: scale(1.10);
-}
-
-/* Versión para celulares */
-
+/* ================== MÓVIL ================== */
 @media (max-width: 768px) {
   .app-shell {
     grid-template-columns: 1fr; /* sidebar arriba */
@@ -149,31 +171,62 @@ h2 {
 
   .main-area {
     grid-template-columns: 1fr; /* foto y detalle en columna */
+    padding: 1rem;
+    gap: 1rem;
   }
 
+  /* --- Sidebar deslizable --- */
   .sidebar {
     flex-direction: row;
-    overflow-x: auto;   /* deslizable horizontal */
-    gap: .5rem;
-    padding: .5rem;
+    align-items: center;
+    padding: .5rem 0;
+    border-radius: 0;
+    overflow: hidden; /* el scroller maneja el overflow-x */
+  }
+
+  .sidebar-scroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
   }
 
   .sidebar-menu {
+    display: inline-flex;
     flex-direction: row;
     gap: .5rem;
-    width: auto;
+    padding: .5rem 1rem;
+    width: max-content; /* importante para habilitar el scroll horizontal */
   }
 
   .menu-item {
     min-width: 80px;
     min-height: 60px;
     font-size: .65rem;
+    white-space: nowrap; /* evita quiebres de línea */
   }
 
-  .photo-panel {
-    justify-content: center;
+  /* Fades laterales sutiles */
+  .sidebar::before,
+  .sidebar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 22px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .sidebar::before {
+    left: 0;
+    background: linear-gradient(90deg, rgba(15,15,20,1), rgba(15,15,20,0));
+  }
+  .sidebar::after {
+    right: 0;
+    background: linear-gradient(-90deg, rgba(15,15,20,1), rgba(15,15,20,0));
   }
 
+  /* Imagen y contenidos */
   .profile-photo {
     width: 200px;
     height: 240px;
@@ -184,113 +237,4 @@ h2 {
     max-width: 350px;
     margin: 20px auto 35px;
   }
-  /* Scroller horizontal en móvil */
-.sidebar {
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-
-@media (max-width: 768px) {
-  .sidebar-menu { display: inline-flex; gap: .5rem; padding: .25rem .5rem; }
-  .menu-item { white-space: nowrap; }
-  .sidebar.show-left  .scroll-indicator.left  { opacity: 1; }
-  .sidebar.show-right .scroll-indicator.right { opacity: 1; }
-}
-.scroll-indicator {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  padding: .35rem .45rem; border-radius: .6rem;
-  background: rgba(15,15,20,.55); backdrop-filter: blur(2px);
-  box-shadow: 0 2px 8px rgba(0,0,0,.25);
-  opacity: 0; pointer-events: none; transition: opacity .2s ease;
-}
-.scroll-indicator.left  { left: 4px; }
-.scroll-indicator.right { right: 4px; }
-.scroll-indicator i { font-size: .9rem; color: #fff; }
-
-}
-
-
-
-
-/* ====== FIX: Sidebar scroller & indicators (mobile) ====== */
-.sidebar { position: relative; }
-.sidebar-scroller { position: relative; }
-
-.scroll-indicator {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: .35rem .45rem;
-  border-radius: .6rem;
-  background: rgba(15,15,20,.55);
-  backdrop-filter: blur(2px);
-  box-shadow: 0 2px 8px rgba(0,0,0,.25);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s ease;
-  z-index: 2;
-}
-.scroll-indicator.left  { left: 4px; }
-.scroll-indicator.right { right: 4px; }
-.scroll-indicator i { font-size: .9rem; color: #fff; }
-
-@media (max-width: 768px) {
-  /* El scroller es el que debe desplazar horizontalmente */
-  .sidebar-scroller {
-    overflow-x: auto;
-    overflow-y: hidden;
-    }
-
-  /* El menú se vuelve horizontal y mide su ancho real para habilitar el overflow */
-  .sidebar-menu {
-    display: inline-flex;
-    gap: .5rem;
-    padding: .25rem .5rem;
-    width: max-content;
-  }
-  .menu-item { white-space: nowrap; }
-
-  /* Fades laterales en el scroller (no en el contenedor padre) */
-  .sidebar-scroller::before,
-  .sidebar::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 22px;
-  pointer-events: none;
-  z-index: 1;
-  background: linear-gradient(-90deg, rgba(15,15,20,1), rgba(15,15,20,0));
-}
-  .sidebar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 22px;
-  pointer-events: none;
-  z-index: 1;
-  background: linear-gradient(90deg, rgba(15,15,20,1), rgba(15,15,20,0));
-}
-  .sidebar::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 22px;
-  pointer-events: none;
-  z-index: 1;
-  background: linear-gradient(-90deg, rgba(15,15,20,1), rgba(15,15,20,0));
-}
-
-  /* Mostrar flechas cuando corresponda */
-  .sidebar.show-left  .scroll-indicator.left  { opacity: 1; }
-  .sidebar.show-right .scroll-indicator.right { opacity: 1; }
 }
