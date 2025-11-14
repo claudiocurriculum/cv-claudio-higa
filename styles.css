@@ -144,7 +144,7 @@ body {
   overflow-y: auto;
   height: 85vh; /* mismo alto que las demás columnas */
   scrollbar-width: thin;
-  scrollbar-color: #8a4dff #1a1a22;
+  scrollbar-color: #E6BE8A #1a1a22; /* #8a4dff */
 }
 
 /* Secciones de detalle */
