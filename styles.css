@@ -125,7 +125,7 @@ body {
   align-items: flex-start;
   background: #1a1a22;
   border-radius: 1rem;
-  border: 1px solid #2f2f3a;
+  border: 1px solid #FFD700; /* borde de imagen lila #2f2f3a */
 }
 
 .profile-photo {
