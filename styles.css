@@ -121,11 +121,13 @@ body {
 
 .photo-panel {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;       /* 👈 FOTO ARRIBA, DATOS ABAJO */
+  justify-content: flex-start;
+  align-items: center;
   background: #1a1a22;
   border-radius: 1rem;
-  border: 1px solid #2f2f3a; /* borde de imagen lila #2f2f3a */
+  border: 1px solid #2f2f3a;
+  padding: 1.2rem 1rem;
 }
 
 .profile-photo {
