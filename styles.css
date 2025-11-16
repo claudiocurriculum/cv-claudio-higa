@@ -156,6 +156,14 @@ body {
 h2 { color: #ffffff; }  /*#8a4dff lila #ffffff blanco #38bdf8  azul petroleo*/
 h3 { color: #00B8F0; }
 
+.subrayado {
+  text-decoration: underline;
+  text-decoration-color: #ffffff;  /* o el color que quieras */
+  text-decoration-thickness: 2px;  /* grosor del subrayado */
+  text-underline-offset: 3px;      /* separación del texto */
+}
+
+
 .mini-img {
   display: block;
   margin: 25px auto 45px auto; /* centrada con espacio */
