@@ -175,6 +175,11 @@ h3 { color: #00B8F0; }
   transition: transform 0.25s ease;
 }
 .mini-img:hover { transform: scale(1.10); }
+.logo-microtrack{
+    height: 45px;
+    width: auto;
+    display: block;
+}
 
 /* ================== MÓVIL ================== */
 @media (max-width: 768px) {
@@ -279,8 +284,5 @@ a:hover {
   color: #0ea5e9;
   border-bottom: 1px solid #0ea5e9;
 }  
-  .logo-microtrack{
-    height: 10px;
-    width: auto;
-}
+  
 }
