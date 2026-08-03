@@ -279,4 +279,8 @@ a:hover {
   color: #0ea5e9;
   border-bottom: 1px solid #0ea5e9;
 }  
+  .logo-microtrack{
+    height: 30px;
+    width: auto;
+}
 }
